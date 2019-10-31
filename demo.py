@@ -1,18 +1,9 @@
 import argparse
 import numpy as np
 import cv2
-import matplotlib.pyplot as plt
 import chainer
 
 from setup_helper import setup_model, setup_capture, setup_visualizer
-
-flag_quit = False
-
-
-def key_event(event):
-    global flag_quit
-    if event.key == 'q':
-        flag_quit = True
 
 
 def parse_args():
@@ -46,22 +37,22 @@ def main():
 
     cap = setup_capture(args.cap)
     cap.start_device()
-    while not flag_quit:
+    while True:
         frame = cap.get_frame()
-        input = frame.astype(np.float32)[:, :, ::-1]  # GBR -> RGB
+        indata = frame.astype(np.float32)[:, :, ::-1]  # GBR -> RGB
         if args.flip:
             frame = cv2.flip(frame, 1)
-            input = cv2.flip(input, 1)
-        input = input.transpose((2, 0, 1))  # HWC -> CHW
+            indata = cv2.flip(indata, 1)
+        indata = indata.transpose((2, 0, 1))  # HWC -> CHW
 
-        outputs = model.predict([input])
+        outputs = model.predict([indata])
         result = visualizer.visualize(frame, outputs)
         cv2.imshow('frame', frame)
         cv2.imshow('result', result)
         key = cv2.waitKey(1) & 0xff
         if key == ord('q'):
             break
-
+    cv2.destroyAllWindows()
     cap.stop_device()
 
 
