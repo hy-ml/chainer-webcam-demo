@@ -1,6 +1,6 @@
 # Webcam Sample
 ## Detection
-Following model is supported.
+Following models are supported.
 - YOLOv2
 - YOLOv3
 - FasterRCNNFPNResNet50
@@ -16,7 +16,7 @@ CPU execution
 python demo.py detection {model_name} --gpu -1
 ```
 
-Sample to demo of YOLOv2 in CPU.
+Sample to demo YOLOv2 in CPU.
 ```python
 python demo.py detection YOLOv2 --gpu -1
 ```
