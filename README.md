@@ -7,16 +7,16 @@ Following models are supported.
 - FasterRCNNFPNResNet101
 
 GPU execution
-```python
+```bash
 python demo.py detection {model_name}
 ```
 
 CPU execution
-```python
+```bash
 python demo.py detection {model_name} --gpu -1
 ```
 
 Sample to demo YOLOv2 in CPU.
-```python
+```bash
 python demo.py detection YOLOv2 --gpu -1
 ```
