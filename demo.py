@@ -6,6 +6,14 @@ import chainer
 
 from setup_helper import setup_model, setup_capture, setup_visualizer
 
+flag_quit = False
+
+
+def key_event(event):
+    global flag_quit
+    if event.key == 'q':
+        flag_quit = True
+
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -15,11 +23,13 @@ def parse_args():
                         help='GPU ID. GPU ID < 0 means CPU.')
     parser.add_argument('--cap', type=str, default='webcam',
                         help='Capture type.', choices=['webcam'])
+    parser.add_argument('--flip', action='store_true')
     args = parser.parse_args()
     return args
 
 
 def main():
+    global flag_quit
     args = parse_args()
 
     model = setup_model(args.model)
@@ -36,14 +46,17 @@ def main():
 
     cap = setup_capture(args.cap)
     cap.start_device()
-    for _ in range(1000):
+    while not flag_quit:
         frame = cap.get_frame().astype(np.float32)
         frame = frame[:, :, ::-1]  # GBR -> RGB
+        if args.flip:
+            frame = cv2.flip(frame, 1)
         frame = frame.transpose((2, 0, 1))  # HWC -> CHW
 
         outputs = model.predict([frame])
         visualizer.visualize(frame, outputs)
-        plt.show()
+        plt.connect('key_press_event', key_event)
+        plt.pause(0.1)
 
     plt.close()
     cap.stop_device()
