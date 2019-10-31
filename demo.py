@@ -47,18 +47,21 @@ def main():
     cap = setup_capture(args.cap)
     cap.start_device()
     while not flag_quit:
-        frame = cap.get_frame().astype(np.float32)
-        frame = frame[:, :, ::-1]  # GBR -> RGB
+        frame = cap.get_frame()
+        input = frame.astype(np.float32)[:, :, ::-1]  # GBR -> RGB
         if args.flip:
             frame = cv2.flip(frame, 1)
-        frame = frame.transpose((2, 0, 1))  # HWC -> CHW
+            input = cv2.flip(input, 1)
+        input = input.transpose((2, 0, 1))  # HWC -> CHW
 
-        outputs = model.predict([frame])
-        visualizer.visualize(frame, outputs)
-        plt.connect('key_press_event', key_event)
-        plt.pause(0.1)
+        outputs = model.predict([input])
+        result = visualizer.visualize(frame, outputs)
+        cv2.imshow('frame', frame)
+        cv2.imshow('result', result)
+        key = cv2.waitKey(1) & 0xff
+        if key == ord('q'):
+            break
 
-    plt.close()
     cap.stop_device()
 
 
