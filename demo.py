@@ -27,7 +27,7 @@ def main():
     if args.gpu >= 0:
         chainer.cuda.get_device_from_id(args.gpu).use()
         model.to_gpu()
-    if 'YOLO' in args.model:
+    if 'YOLO' in args.model or 'SSD' in args.model:
         pretrained_dataset = 'voc'
     elif 'RCNN' in args.model:
         pretrained_dataset = 'coco'

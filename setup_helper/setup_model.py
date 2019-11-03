@@ -6,6 +6,10 @@ def setup_model(model_type):
         model = links.model.yolo.YOLOv2(pretrained_model='voc0712')
     elif model_type == 'YOLOv3':
         model = links.model.yolo.YOLOv3(pretrained_model='voc0712')
+    elif model_type == 'SSD300':
+        model = links.model.ssd.SSD300(pretrained_model='voc0712')
+    elif model_type == 'SSD512':
+        model = links.model.ssd.SSD512(pretrained_model='voc0712')
     elif model_type == 'FasterRCNNFPNResNet50':
         model = links.model.fpn.FasterRCNNFPNResNet50(
             pretrained_model='coco',
